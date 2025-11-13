@@ -32,7 +32,7 @@ public class BookingCategoryActivity extends AppCompatActivity {
     ActivityBookingCategoryBinding binding;
     User user;  KProgressHUD hud;
 
-
+//hfcfydffy
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
