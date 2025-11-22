@@ -65,13 +65,6 @@ ActivityWithdrawalBinding binding;
             }
         });
 
-//        binding.myprofilesubmit.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//
-//            }
-//        });
         backarrow = findViewById(R.id.backarrow);
         name = findViewById(R.id.profilename);
         phone = findViewById(R.id.profilephone);
@@ -83,33 +76,19 @@ ActivityWithdrawalBinding binding;
         usename = findViewById(R.id.usename);
         submit = findViewById(R.id.submit);
         userid = user.getUserid();
-//        name.setEnabled(false);
-//        email.setEnabled(false);
-//        city.setEnabled(false);
-//        address.setEnabled(false);
-//        pincode.setEnabled(false);
-
-
-
         backarrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-
-
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 updateAccount();
             }
         });
-
-
     }
-
-
     private void updateAccount() {
         Call<List<MessageModels>> call = apicontroller.getInstance().getapi()
                 .withdraw_bank_insert(user.getUserid(), name.getText().toString(), address.getText().toString()
@@ -127,14 +106,10 @@ ActivityWithdrawalBinding binding;
 
                 if (data.get(0).getMessage().equals("2")) {
                     Toast.makeText(getApplicationContext(), "Insufficient Wallet Amount.", Toast.LENGTH_SHORT).show();
-//                    finish();
-
                 }
 
                 if (data.get(0).getMessage().equals("3")) {
                     Toast.makeText(getApplicationContext(), "Invalid User Detail.", Toast.LENGTH_SHORT).show();
-//                    finish();
-
                 }
 
                 if (Integer.parseInt(data.get(0).getMessage()) == 0) {
@@ -146,9 +121,6 @@ ActivityWithdrawalBinding binding;
 
             @Override
             public void onFailure(Call<List<MessageModels>> call, Throwable t) {
-
-//                Toast.makeText(getApplicationContext(), t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-
             }
         });
     }

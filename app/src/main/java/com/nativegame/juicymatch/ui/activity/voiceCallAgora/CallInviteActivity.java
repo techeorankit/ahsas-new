@@ -1,7 +1,10 @@
 package com.nativegame.juicymatch.ui.activity.voiceCallAgora;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static com.nativegame.juicymatch.ui.config.apicontroller.shop_logo_url;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -10,6 +13,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.Request;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.nativegame.juicymatch.R;
@@ -25,6 +31,7 @@ import com.zegocloud.uikit.service.defines.ZegoUIKitUser;
 
 import org.json.JSONObject;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +48,7 @@ public class CallInviteActivity extends AppCompatActivity {
     private String receiver_id = "";
     private long callStartTime = 0;
     private long callEndTime = 0;
+    private boolean isVideoCall = false; // Track call type
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,10 +73,39 @@ public class CallInviteActivity extends AppCompatActivity {
             }
         });
 
-        initVoiceButton();
+        initVoiceCallButton();
+        initVideoCallButton();
         walletFetch();
+        get_status();
+    }
 
+    private void get_status() {
+        String url = apicontroller.url+"get_status.php?userid=" + user.getUserid();
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null,
+                response -> {
+                    try {
+                        String status = response.getString("video_status");
+                        handleVideoStatus(status);
+                    } catch (Exception e) {
+                    }
+                },
+                error -> {
+                }
+        );
 
+        Volley.newRequestQueue(this).add(request);
+    }
+
+    private void handleVideoStatus(String status) {
+        if ("1".equals(status)) {
+            binding.videocl.setVisibility(VISIBLE);
+        } else {
+            binding.videocl.setVisibility(GONE);
+
+        }
     }
 
 
@@ -95,58 +132,66 @@ public class CallInviteActivity extends AppCompatActivity {
                 finish();
             }
         }.start();
-
     }
 
     private void walletFetch() {
-
         Call<List<LoginModels>> call = apicontroller.getInstance().getapi().logIn(user.getUserphone());
         call.enqueue(new Callback<List<LoginModels>>() {
             @Override
             public void onResponse(Call<List<LoginModels>> call, Response<List<LoginModels>> response) {
                 List<LoginModels> data = response.body();
 
-                if (Integer.parseInt(data.get(0).getMessage()) == 1) {
+                if (data != null && !data.isEmpty()) {
+                    String message = data.get(0).getMessage();
 
-                    if (!data.get(0).getU_wallet().isEmpty()) {
-                        if (Integer.parseInt(data.get(0).getU_wallet()) > 4) {
+                    if (message.equals("1")) {
 
-                            coin = Integer.parseInt(data.get(0).getU_wallet());
+                        String walletStr = data.get(0).getU_wallet();
 
+                        if (walletStr != null && !walletStr.isEmpty()) {
+                            double walletValue = Double.parseDouble(walletStr);
+
+                            if (walletValue > 4) {
+                                // If coin must be int
+                                coin = (int) walletValue;
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Please add coins.", Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
                         } else {
                             Toast.makeText(getApplicationContext(), "Please add coins.", Toast.LENGTH_SHORT).show();
                             finish();
                         }
-                    } else {
+
+                    } else if (message.equals("0")) {
                         Toast.makeText(getApplicationContext(), "Please add coins.", Toast.LENGTH_SHORT).show();
                         finish();
                     }
-
-
                 }
-                if (Integer.parseInt(data.get(0).getMessage()) == 0) {
-                    Toast.makeText(getApplicationContext(), "Please add coins.", Toast.LENGTH_SHORT).show();
-                    finish();
-                }
-
-
             }
 
             @Override
             public void onFailure(Call<List<LoginModels>> call, Throwable t) {
                 finish();
                 Toast.makeText(getApplicationContext(), t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-
             }
         });
     }
-
-
-    private void initVoiceButton() {
-        ZegoSendCallInvitationButton newVoiceCall = findViewById(R.id.new_voice_call);
-        newVoiceCall.setIsVideoCall(false);
-        newVoiceCall.setOnClickListener(v -> {
+    private void initVoiceCallButton() {
+        ZegoSendCallInvitationButton voiceCallButton = findViewById(R.id.new_voice_call);
+        voiceCallButton.setIsVideoCall(false); // Voice call
+        try {
+            hideZegoIcon(voiceCallButton);
+        } catch (Exception e) {
+            Log.e("VoiceCall", "Cannot modify Zego icon: " + e.getMessage());
+        }
+        voiceCallButton.setOnClickListener(v -> {
             Log.d("receiver_id", receiver_id);
+            isVideoCall = false;
+            if (coin <= 4) {
+                Toast.makeText(getApplicationContext(), "Insufficient coins. Please recharge.", Toast.LENGTH_SHORT).show();
+                return;
+            }
             String targetUserID = receiver_id;
             String[] split = targetUserID.split(",");
             List<ZegoUIKitUser> users = new ArrayList<>();
@@ -154,48 +199,85 @@ public class CallInviteActivity extends AppCompatActivity {
                 String userName = userID + "_name";
                 users.add(new ZegoUIKitUser(userID, userName));
             }
-            newVoiceCall.setInvitees(users);
+            voiceCallButton.setInvitees(users);
             timeDurationEvent();
-            Log.d("receiver_id", "" + newVoiceCall.toString());
+            binding.callStatus.setText("Initiating voice call...");
+            Log.d("CallType", "Voice Call initiated");
+        });
+    }
+    private void hideZegoIcon(ZegoSendCallInvitationButton button) {
+        try {
+            Method setIconMethod = button.getClass().getMethod("setIcon", int.class);
+            setIconMethod.invoke(button, android.R.color.transparent);
+        } catch (Exception e) {
+            Log.d("ZegoIcon", "setIcon method not available");
+        }
 
+        try {
+            Method setIconTintMethod = button.getClass().getMethod("setIconTint", int.class);
+            setIconTintMethod.invoke(button, Color.TRANSPARENT);
+        } catch (Exception e) {
+            Log.d("ZegoIcon", "setIconTint method not available");
+        }
+    }
+    private void initVideoCallButton() {
+        ZegoSendCallInvitationButton videoCallButton = findViewById(R.id.new_video_call);
+        videoCallButton.setIsVideoCall(true);
+        videoCallButton.setOnClickListener(v -> {
+            Log.d("receiver_id", receiver_id);
+            isVideoCall = true;
+            String targetUserID = receiver_id;
+            String[] split = targetUserID.split(",");
+            List<ZegoUIKitUser> users = new ArrayList<>();
+            for (String userID : split) {
+                String userName = userID + "_name";
+                users.add(new ZegoUIKitUser(userID, userName));
+            }
+            if (coin <= 4) {
+                Toast.makeText(getApplicationContext(), "Insufficient coins. Please recharge.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            videoCallButton.setInvitees(users);
+            timeDurationEvent();
+                Log.d("CallType", "Video Call initiated");
         });
     }
 
-    private void callTransaction(String duration,String totalDuration) {
+    private void callTransaction(String duration, String totalDuration) {
 
-        Call<List<LoginModels>> call = apicontroller.getInstance().getapi().callTransaction(user.getSender_id(),receiver_id,duration,totalDuration);
+        // Call type information add करें
+        String callType = isVideoCall ? "video" : "voice";
+
+        Call<List<LoginModels>> call = apicontroller.getInstance().getapi().callTransaction(
+                user.getSender_id(),
+                receiver_id,
+                duration,
+                totalDuration,callType
+        );
+
         call.enqueue(new Callback<List<LoginModels>>() {
             @Override
             public void onResponse(Call<List<LoginModels>> call, Response<List<LoginModels>> response) {
                 List<LoginModels> data = response.body();
                 Gson gson = new Gson();
                 String json = gson.toJson(data);
-                 Log.d("CallEvent",json.toString());
+                Log.d("CallEvent", json.toString());
 
                 if (Integer.parseInt(data.get(0).getMessage()) == 1) {
-
-//                    user.setUserid(data.get(0).getU_id());
-//                    binding.appBarMain.balance.setText(data.get(0).getU_wallet()+" Coins");
-
-//                    Toast.makeText(getApplicationContext(), "Success .", Toast.LENGTH_SHORT).show();
-
+                    Log.d("CallEvent", "Call transaction successful - " + callType + " call");
                 }
                 if (Integer.parseInt(data.get(0).getMessage()) == 0) {
-//                    Toast.makeText(getApplicationContext(), "Failed ! .", Toast.LENGTH_SHORT).show();
-//                    startActivity(new Intent(getApplicationContext(), SignUp.class));
+                    Log.d("CallEvent", "Call transaction failed");
                 }
-
-
             }
 
             @Override
             public void onFailure(Call<List<LoginModels>> call, Throwable t) {
-
                 Toast.makeText(getApplicationContext(), t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-
             }
         });
     }
+
     public void timeDurationEvent() {
 
         ZegoUIKit.addRoomStateChangedListener(new RoomStateChangedListener() {
@@ -206,6 +288,7 @@ public class CallInviteActivity extends AppCompatActivity {
                                            JSONObject extendedData) {
                 Log.d("CallEvent", "roomID: " + roomID);
                 Log.d("CallEvent", "reason: " + reason.name());
+                Log.d("CallEvent", "Call Type: " + (isVideoCall ? "Video" : "Voice"));
 
                 switch (reason) {
                     case LOGINING:
@@ -228,17 +311,14 @@ public class CallInviteActivity extends AppCompatActivity {
                             String durationStr = formatDuration(seconds);
                             long minutes = (long) Math.ceil(seconds / 60.0);
 
-
                             Log.d("CallEvent", "Call duration: " + minutes);
+                            Log.d("CallEvent", "Call type: " + (isVideoCall ? "Video" : "Voice"));
+
                             binding.imageView5.setText(durationStr + "\nCall Duration Time");
                             Toast.makeText(getApplicationContext(),
                                     "Call End",
                                     Toast.LENGTH_LONG).show();
-
-                            callTransaction(String.valueOf(minutes),durationStr);
-
-
-                            // Reset
+                            callTransaction(String.valueOf(minutes), durationStr);
                             callStartTime = 0;
                             callEndTime = 0;
                         }
@@ -262,24 +342,4 @@ public class CallInviteActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
     }
-
-//    public void addCallFragment() {
-//        long appID = 301281619;
-//        String appSign = "18a9a4356a65adfe46b1a1e6274e3685630887cf4ce43009a485f69aea4bff5e";
-//
-//        String callID = "1";
-//        String userID ="1"; // yourUserID, userID should only contain numbers, English characters, and '_'.
-//        String userName ="deepak";   // yourUserName
-//
-//        // You can also use GroupVideo/GroupVoice/OneOnOneVoice to make more types of calls.
-//        ZegoUIKitPrebuiltCallConfig config = ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall();
-//
-//        ZegoUIKitPrebuiltCallFragment fragment = ZegoUIKitPrebuiltCallFragment.newInstance(
-//                appID, appSign, userID, userName, callID, config);
-//
-//        getSupportFragmentManager().beginTransaction()
-//                .replace(R.id.fragment_container, fragment)
-//                .commitNow();
-//    }
-
 }

@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- ON State -->
     <item android:state_checked="true">
         <shape android:shape="rectangle">
+            <solid android:color="#4CAF50"/> <!-- Green -->
             <corners android:radius="50dp" />
-            <solid android:color="#4CAF50" /> <!-- Green when ON -->
         </shape>
     </item>
+
+    <!-- OFF State -->
     <item android:state_checked="false">
         <shape android:shape="rectangle">
+            <solid android:color="#F44336"/> <!-- Red -->
             <corners android:radius="50dp" />
-            <solid android:color="#F44336" /> <!-- Red when OFF -->
         </shape>
     </item>
+
 </selector>

@@ -113,9 +113,7 @@ public class WalletActivity extends AppCompatActivity {
 //                    Toast.makeText(WalletTransection.this,data.get(0).getU_wallet() , Toast.LENGTH_SHORT).show();
                     }
 
-
                 }
-
 
             }
 

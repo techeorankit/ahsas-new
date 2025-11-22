@@ -66,10 +66,10 @@ public interface apiset {
     @GET("call_transaction.php")
     Call<List<LoginModels>> callTransaction(
             @Query("sender_id") String sender_id,
-            @Query("receiver_id") String mobfdile,
-            @Query("duration") String mofsbile,
-            @Query("totalDuration") String totalDuration
-
+            @Query("receiver_id") String receiver_id,
+            @Query("duration") String duration,
+            @Query("totalDuration") String totalDuration,
+            @Query("callType") String callType
     );
 
     @GET("chat_transaction.php")

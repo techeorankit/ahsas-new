@@ -44,37 +44,21 @@ public class GroupCallActivity extends AppCompatActivity {
         user = new User(this);
         receiver_id = getIntent().getStringExtra("receiver_id");
         database = FirebaseDatabase.getInstance();
-
         messageModels = new ArrayList<>();
-
         walletFetch();
-
-
         addFragment();
-
         liveGroupFetch();
-
-
-
-
-
     }
-
     private void walletFetch () {
-
         Call<List<LoginModels>> call = apicontroller.getInstance().getapi().logIn(user.getUserphone());
         call.enqueue(new Callback<List<LoginModels>>() {
             @Override
             public void onResponse(Call<List<LoginModels>> call, Response<List<LoginModels>> response) {
                 List<LoginModels> data = response.body();
-
                 if (Integer.parseInt(data.get(0).getMessage()) == 1) {
-
                     if (!data.get(0).getU_wallet().isEmpty()) {
                         if (Integer.parseInt(data.get(0).getU_wallet()) > 4) {
-
                             coin = Integer.parseInt(data.get(0).getU_wallet());
-
                         } else {
                             Toast.makeText(getApplicationContext(), "Please add coins.", Toast.LENGTH_SHORT).show();
                             finish();
@@ -83,8 +67,6 @@ public class GroupCallActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Please add coins.", Toast.LENGTH_SHORT).show();
                         finish();
                     }
-
-
                 }
                 if (Integer.parseInt(data.get(0).getMessage()) == 0) {
                     Toast.makeText(getApplicationContext(), "Please add coins.", Toast.LENGTH_SHORT).show();

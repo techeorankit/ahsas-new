@@ -13,149 +13,128 @@
         android:background="@color/bg_color"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:elevation="0dp">
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_40sdp"
+            android:layout_height="@dimen/_45sdp"
             android:background="@color/white"
-            app:contentInsetLeft="0dp"
             app:contentInsetStart="0dp"
+            app:contentInsetLeft="0dp"
             app:contentInsetStartWithNavigation="0dp"
             app:layout_scrollFlags="scroll|enterAlways">
 
             <RelativeLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:padding="@dimen/_4sdp"
+                android:background="@color/white">
 
-
+                <!-- Left Side Logo -->
                 <ImageView
                     android:id="@+id/getmiihome"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/_30sdp"
+                    android:layout_width="50dp"
+                    android:layout_height="@dimen/_24sdp"
                     android:layout_centerVertical="true"
-                    android:layout_gravity="start|center_vertical"
+                    android:layout_alignParentStart="true"
                     android:adjustViewBounds="true"
-                    android:scaleType="fitXY"
+                    android:scaleType="fitCenter"
                     android:src="@drawable/logo" />
 
-
-                <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                    android:layout_width="wrap_content"
+                <!-- Recharge Card (Right-most) -->
+                <androidx.cardview.widget.CardView
                     android:id="@+id/card"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
+                    android:layout_width="@dimen/_50sdp"
+                    android:layout_height="@dimen/_30sdp"
                     android:layout_centerVertical="true"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="@dimen/_5sdp"
-                    android:layout_marginTop="@dimen/_2sdp"
-                    android:layout_marginRight="@dimen/_5sdp"
-                    android:layout_weight="1"
-                    android:background="@color/white"
-                    android:paddingBottom="10dp"
-                    card_view:cardCornerRadius="@dimen/_50sdp">
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    card_view:cardCornerRadius="@dimen/_6sdp"
+                    card_view:cardElevation="2dp">
 
                     <LinearLayout
                         android:id="@+id/chat"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:background="#102599"
-                        android:orientation="vertical"
-                        android:padding="@dimen/_5sdp">
-
+                        android:gravity="center"
+                        android:orientation="vertical">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:drawablePadding="@dimen/_5sdp"
-                            android:drawableTint="@color/white"
-                            android:gravity="center"
                             android:text="Recharge"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/_12sdp"
+                            android:textSize="@dimen/_9sdp"
                             android:textStyle="bold" />
-
-
                     </LinearLayout>
-
-
                 </androidx.cardview.widget.CardView>
 
-                <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@id/card"
+                <!-- Balance Card (Left of Recharge) -->
+                <androidx.cardview.widget.CardView
                     android:id="@+id/onoff"
-                    android:visibility="gone"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="@dimen/_5sdp"
-                    android:layout_marginTop="@dimen/_2sdp"
-                    android:layout_marginRight="@dimen/_5sdp"
-                    android:layout_weight="1"
-                    android:paddingBottom="10dp"
-                   >
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@id/card"
+                    android:layout_marginEnd="@dimen/_6sdp"
+                    card_view:cardCornerRadius="@dimen/_6sdp"
+                    card_view:cardElevation="2dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
                         android:orientation="vertical"
-                        android:padding="@dimen/_5sdp">
-
+                        android:padding="@dimen/_3sdp">
 
                         <TextView
                             android:id="@+id/balance"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:visibility="gone"
-                            android:drawablePadding="@dimen/_5sdp"
-                            android:drawableTint="@color/black"
-                            android:gravity="center"
+                            android:text="₹ 500"
                             android:textColor="@color/black"
-                            android:textSize="@dimen/_12sdp"
+                            android:textSize="@dimen/_9sdp"
                             android:textStyle="bold" />
-
-
                     </LinearLayout>
-
-
                 </androidx.cardview.widget.CardView>
+
                 <ToggleButton
-                    android:layout_toLeftOf="@id/onoff"
                     android:id="@+id/toggleButton"
-                    android:layout_width="60dp"
-                    android:layout_height="30dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@id/onoff"
+                    android:layout_marginEnd="6dp"
                     android:textOn="ON"
-                    android:layout_marginTop="@dimen/_8sdp"
                     android:textOff="OFF"
                     android:checked="false"
-                    android:background="@drawable/toggle_track_selector"
-                    android:button="@drawable/toggle_thumb_selector"
-                    android:textColor="@android:color/white" />
+                    android:background="@drawable/toggle_rounded"
+                    android:button="@null"
+                android:textColor="@android:color/white"
+                android:textSize="10sp"
+                android:padding="2dp" />
 
+
+                <!-- Hidden App Name -->
                 <TextView
                     android:id="@+id/getmiihome11"
                     android:layout_width="wrap_content"
-                    android:layout_height="@dimen/_26sdp"
-                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
                     android:fontFamily="@font/bad_script"
-                    android:gravity="center_horizontal"
-                    android:src="@drawable/logo"
-
                     android:text="@string/app_name"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_16sdp"
+                    android:textSize="@dimen/_10sdp"
                     android:textStyle="bold"
                     android:visibility="gone" />
 
             </RelativeLayout>
-
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

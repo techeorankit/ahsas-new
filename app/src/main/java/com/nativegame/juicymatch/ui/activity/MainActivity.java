@@ -11,6 +11,9 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.StateListDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -245,16 +248,25 @@ public class MainActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (currentStatus == 1) {
-                    toggleButton.setChecked(true);
-                    toggleButton.setBackgroundColor(ContextCompat.getColor(MainActivity.this, R.color.green));
-                } else {
-                    toggleButton.setChecked(false);
-                    toggleButton.setBackgroundColor(ContextCompat.getColor(MainActivity.this, R.color.red));
+                toggleButton.setChecked(currentStatus == 1);
+
+                // Get the background as a StateListDrawable (selector)
+                StateListDrawable drawable = (StateListDrawable) toggleButton.getBackground();
+                // Extract current drawable
+                Drawable current = drawable.getCurrent();
+
+                if (current instanceof GradientDrawable) {
+                    GradientDrawable gradient = (GradientDrawable) current.mutate();
+                    if (currentStatus == 1) {
+                        gradient.setColor(ContextCompat.getColor(MainActivity.this, R.color.green));
+                    } else {
+                        gradient.setColor(ContextCompat.getColor(MainActivity.this, R.color.red));
+                    }
                 }
             }
         });
     }
+
 
     public void setStatus(int status) {
         this.currentStatus = status;

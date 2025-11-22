@@ -4,11 +4,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
-    android:background="@drawable/bg_astro"
-    android:backgroundTint="#DFDDDD"
+    android:background="@color/white"
     android:layout_height="match_parent"
-    tools:context=".ui.activity.voiceCallAgora.VoiceCallActivity">
+    tools:context=".ui.activity.voiceCallAgora.CallInviteActivity">
 
+    <!-- Header Section -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -17,194 +17,253 @@
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:padding="8dp">
 
             <ImageView
                 android:id="@+id/backArrow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
                 android:src="@drawable/ic_baseline_arrow_back_24"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 app:tint="@color/black" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profile_image"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginLeft="5dp"
-                android:padding="5dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="12dp"
+                android:layout_toEndOf="@+id/backArrow"
                 android:src="@drawable/avatar"
                 app:civ_border_color="#FF000000"
-                app:civ_border_width="2dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/backArrow"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:civ_border_width="1.5dp" />
 
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/profile_image">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="12dp"
+                android:layout_toEndOf="@+id/profile_image"
+                android:layout_toStartOf="@+id/imageView5"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/name"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_toLeftOf="@id/imageView5"
+                    android:ellipsize="end"
                     android:maxLines="1"
+                    android:text="User Name"
                     android:textColor="@color/black"
-                    android:textSize="14sp"
-                    tools:ignore="NotSibling" />
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/name"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginStart="5dp"
-                    android:layout_toLeftOf="@id/imageView5"
-                    android:maxLines="1"
-                    android:text="( 05:00 mins )"
+                    android:layout_marginTop="2dp"
+                    android:text="(5 Coins / mins)"
                     android:textColor="#FF0E0E"
-                    android:textColorHint="@color/white"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    tools:ignore="NotSibling" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/typing"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/time"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginStart="5dp"
-                    android:layout_toLeftOf="@id/imageView5"
-                    android:maxLines="1"
+                    android:layout_marginTop="2dp"
                     android:text="Typing..."
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/white"
+                    android:textColor="@color/gray"
                     android:textSize="10sp"
-                    android:visibility="gone"
-                    tools:ignore="NotSibling" />
+                    android:visibility="gone" />
 
+            </LinearLayout>
 
+            <TextView
+                android:id="@+id/imageView5"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/btn_round"
+                android:gravity="center"
+                android:padding="12dp"
+                android:text="00:00"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
-            </RelativeLayout>
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
+        </RelativeLayout>
 
     </androidx.appcompat.widget.Toolbar>
 
+    <!-- Main Content Section -->
     <LinearLayout
-        android:layout_centerVertical="true"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:layout_centerInParent="true"
         android:gravity="center"
         android:orientation="vertical"
-        android:layout_below="@id/toolbar"
-        android:layout_height="wrap_content">
+        android:padding="20dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profile_image1"
-            android:layout_width="185dp"
-            android:layout_height="185dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginLeft="5dp"
-            android:padding="5dp"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="20dp"
             android:src="@drawable/avatar"
-            app:civ_border_color="#FF000000"
-            app:civ_border_width="2dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/backArrow"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/imageView5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginTop="@dimen/_25sdp"
-            android:background="@drawable/btn_round"
-            android:padding="@dimen/_25sdp"
-            android:gravity="center"
-            android:text="Call Duration Time"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_14sdp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.981"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.423" />
+            app:civ_border_color="@color/white"
+            app:civ_border_width="3dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:background="@drawable/raound_login"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:padding="@dimen/_10sdp"
+            android:gravity="center"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp"
             android:text="5 Coins / min"
             android:textColor="#FF0E0E"
-            android:textSize="@dimen/_12sdp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.981"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.423" />
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
-
+        <TextView
+            android:id="@+id/call_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Ready to connect"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
 
     </LinearLayout>
 
-
+    <!-- Call Controls Section -->
     <LinearLayout
-        android:padding="@dimen/_10sdp"
-        android:background="@drawable/round_googlepay"
         android:layout_width="match_parent"
-        android:layout_marginLeft="@dimen/_5sdp"
-        android:layout_marginRight="@dimen/_5sdp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/_20sdp"
         android:layout_alignParentBottom="true"
-        android:orientation="vertical">
+        android:layout_margin="16dp"
+        android:background="@drawable/round_googlepay"
+        android:orientation="vertical"
+        android:padding="20dp">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Choose Call Type"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="2"
-            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <!-- Voice Call Button -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:gravity="center">
+                    <com.zegocloud.uikit.prebuilt.call.invite.widget.ZegoSendCallInvitationButton
+                        android:id="@+id/new_voice_call"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        />
+                </RelativeLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Voice Call"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <!-- Video Call Button -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:id="@+id/videocl"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/ic_video_call" />
+
+                    <com.zegocloud.uikit.prebuilt.call.invite.widget.ZegoSendCallInvitationButton
+                        android:id="@+id/new_video_call"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent" />
+
+                </RelativeLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Video Call"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Call Info -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:visibility="gone"
             android:gravity="center"
             android:orientation="horizontal">
 
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_coin"
+                app:tint="#FFD700" />
+
             <TextView
+                android:id="@+id/balance_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_vertical"
-                android:text="Call Now"
-                android:textSize="@dimen/_14sdp"
+                android:layout_marginStart="8dp"
+                android:text="Balance: 0 coins"
                 android:textColor="@color/black"
-                android:scaleType="centerInside"
-                android:src="@drawable/btn_speaker" />
-
-            <com.zegocloud.uikit.prebuilt.call.invite.widget.ZegoSendCallInvitationButton
-                android:id="@+id/new_voice_call"
-                android:layout_width="50dp"
-                android:layout_height="50dp" />
+                android:textSize="12sp" />
 
         </LinearLayout>
 
