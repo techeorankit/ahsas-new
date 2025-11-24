@@ -56,11 +56,12 @@ public class CallInviteActivity extends AppCompatActivity {
 
         binding = ActivityCallInviteBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        Log.d("receiver_id1122", receiver_id);
+
         user = new User(this);
         receiver_id = getIntent().getStringExtra("receiver_id");
         binding.name.setText(getIntent().getStringExtra("name"));
         binding.time.setText("( " + 5 + " Coins / mins )");
+        Log.d("receiver_id1122", receiver_id);
         Glide.with(getApplicationContext())
                 .load(shop_logo_url + getIntent().getStringExtra("image")).placeholder(R.drawable.logo).into(binding.profileImage);
         Glide.with(getApplicationContext())
@@ -151,7 +152,7 @@ public class CallInviteActivity extends AppCompatActivity {
                         if (walletStr != null && !walletStr.isEmpty()) {
                             double walletValue = Double.parseDouble(walletStr);
 
-                            if (walletValue > 4) {
+                            if (walletValue >= 3) {
                                 // If coin must be int
                                 coin = (int) walletValue;
                             } else {
@@ -188,7 +189,7 @@ public class CallInviteActivity extends AppCompatActivity {
         voiceCallButton.setOnClickListener(v -> {
             Log.d("receiver_id", receiver_id);
             isVideoCall = false;
-            if (coin <= 4) {
+            if (coin < 3) {
                 Toast.makeText(getApplicationContext(), "Insufficient coins. Please recharge.", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -233,7 +234,7 @@ public class CallInviteActivity extends AppCompatActivity {
                 String userName = userID + "_name";
                 users.add(new ZegoUIKitUser(userID, userName));
             }
-            if (coin <= 4) {
+            if (coin < 20) {
                 Toast.makeText(getApplicationContext(), "Insufficient coins. Please recharge.", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -247,12 +248,13 @@ public class CallInviteActivity extends AppCompatActivity {
 
         // Call type information add करें
         String callType = isVideoCall ? "video" : "voice";
-
+        isVideoCall = false;
         Call<List<LoginModels>> call = apicontroller.getInstance().getapi().callTransaction(
                 user.getSender_id(),
                 receiver_id,
                 duration,
-                totalDuration,callType
+                totalDuration,
+                callType
         );
 
         call.enqueue(new Callback<List<LoginModels>>() {
