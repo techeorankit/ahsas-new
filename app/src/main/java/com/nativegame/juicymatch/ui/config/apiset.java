@@ -153,6 +153,11 @@ public interface apiset {
             @Query("u_id") String u_id
     );
 
+    @GET("call_fetch.php")
+    Call<List<DoctorDetailModel>> call_fetch(
+            @Query("sender_id") String sender_id
+    );
+
     @GET("user_time.php")
     Call<List<LoginModels>> user_time(
 

@@ -1,9 +1,11 @@
 package com.nativegame.juicymatch.ui.models;
 
 public class DoctorDetailModel {
-    String age,country,language1,language2,language3, db_id, d_id, u_id,shop_logo, slot_date, slot_time, status, date, time, percent, c_id, sc_id, sender_id, name, mobile, subject, experience, city, hospital, fees, follow, comment, total_patient, address, rating, s_desc, l_desc, slots, image, email, password, dob;
+    String create_date,create_time,age,country,language1,language2,language3, db_id, d_id, u_id,shop_logo, slot_date, slot_time, status, date, time, percent, c_id, sc_id, sender_id, name, mobile, subject, experience, city, hospital, fees, follow, comment, total_patient, address, rating, s_desc, l_desc, slots, image, email, password, dob;
 
-    public DoctorDetailModel(String age, String country, String language1, String language2, String language3, String db_id, String d_id, String u_id, String shop_logo, String slot_date, String slot_time, String status, String date, String time, String percent, String c_id, String sc_id, String sender_id, String name, String mobile, String subject, String experience, String city, String hospital, String fees, String follow, String comment, String total_patient, String address, String rating, String s_desc, String l_desc, String slots, String image, String email, String password, String dob) {
+    public DoctorDetailModel(String create_date,String create_time,String age, String country, String language1, String language2, String language3, String db_id, String d_id, String u_id, String shop_logo, String slot_date, String slot_time, String status, String date, String time, String percent, String c_id, String sc_id, String sender_id, String name, String mobile, String subject, String experience, String city, String hospital, String fees, String follow, String comment, String total_patient, String address, String rating, String s_desc, String l_desc, String slots, String image, String email, String password, String dob) {
+        this.create_time = create_time;
+        this.create_date = create_date;
         this.age = age;
         this.country = country;
         this.language1 = language1;
@@ -41,6 +43,22 @@ public class DoctorDetailModel {
         this.email = email;
         this.password = password;
         this.dob = dob;
+    }
+
+    public String getCreate_date() {
+        return create_date;
+    }
+
+    public void setCreate_date(String create_date) {
+        this.create_date = create_date;
+    }
+
+    public String getCreate_time() {
+        return create_time;
+    }
+
+    public void setCreate_time(String create_time) {
+        this.create_time = create_time;
     }
 
     public String getLanguage1() {

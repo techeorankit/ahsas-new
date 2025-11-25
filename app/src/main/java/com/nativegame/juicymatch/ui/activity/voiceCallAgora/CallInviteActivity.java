@@ -25,6 +25,7 @@ import com.nativegame.juicymatch.ui.config.apicontroller;
 import com.nativegame.juicymatch.ui.models.LoginModels;
 import com.nativegame.juicymatch.ui.models.User;
 import com.zegocloud.uikit.ZegoUIKit;
+import com.zegocloud.uikit.prebuilt.call.ZegoUIKitPrebuiltCallFragment;
 import com.zegocloud.uikit.prebuilt.call.ZegoUIKitPrebuiltCallService;
 import com.zegocloud.uikit.prebuilt.call.invite.widget.ZegoSendCallInvitationButton;
 import com.zegocloud.uikit.service.defines.RoomStateChangedListener;
@@ -47,6 +48,8 @@ public class CallInviteActivity extends AppCompatActivity {
     ActivityCallInviteBinding binding;
     int time = 5;
     int coin = 0;
+    String orderId="";
+    String callType="";
     private String receiver_id = "";
     private long callStartTime = 0;
     private long callEndTime = 0;
@@ -195,7 +198,7 @@ public class CallInviteActivity extends AppCompatActivity {
         }
         voiceCallButton.setOnClickListener(v -> {
             Log.d("receiver_id", receiver_id);
-            isVideoCall = false;
+            callType = "voice";
             if (coin < 3) {
                 Toast.makeText(getApplicationContext(), "Insufficient coins. Please recharge.", Toast.LENGTH_SHORT).show();
                 return;
@@ -208,9 +211,36 @@ public class CallInviteActivity extends AppCompatActivity {
                 users.add(new ZegoUIKitUser(userID, userName));
             }
             voiceCallButton.setInvitees(users);
+            Log.d("CallEvent", "call: ");
+            int orderIdff = (int) (Math.random() * 1000000000);;
+             orderId=String.valueOf(orderIdff);
+            Log.d("CallEvent", "orderId: " + orderId);
+            callStatus(orderId);
             timeDurationEvent();
 //            binding.callStatus.setText("Initiating voice call...");
             Log.d("CallType", "Voice Call initiated");
+
+
+
+
+//            // Launch Zego Prebuilt Call Fragment
+//            ZegoUIKitPrebuiltCallFragment callFragment =
+//                    ZegoUIKitPrebuiltCallFragment.newInstance(orderId); // true = video call
+//
+//            // Optional: set invitees
+//
+//
+//            // Show call fragment in container
+//            getSupportFragmentManager().beginTransaction()
+//                    .replace(R.id.call_container, callFragment)
+//                    .commit();
+//
+//            Log.d("CallType", "Video Call initiated via PrebuiltCallFragment");
+
+
+
+
+
         });
     }
     private void hideZegoIcon(ZegoSendCallInvitationButton button) {
@@ -233,7 +263,7 @@ public class CallInviteActivity extends AppCompatActivity {
         videoCallButton.setIsVideoCall(true);
         videoCallButton.setOnClickListener(v -> {
             Log.d("receiver_id", receiver_id);
-            isVideoCall = true;
+            callType = "video";
             String targetUserID = receiver_id;
             String[] split = targetUserID.split(",");
             List<ZegoUIKitUser> users = new ArrayList<>();
@@ -245,17 +275,27 @@ public class CallInviteActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Insufficient coins. Please recharge.", Toast.LENGTH_SHORT).show();
                 return;
             }
+
             videoCallButton.setInvitees(users);
+            Log.d("CallEvent", "call: ");
+            int orderIdff = (int) (Math.random() * 1000000000);;
+            orderId=String.valueOf(orderIdff);
+            Log.d("CallEvent", "orderId: " + orderId);
+            callStatus(orderId);
             timeDurationEvent();
-                Log.d("CallType", "Video Call initiated");
+//            binding.callStatus.setText("Initiating voice call...");
+            Log.d("CallType", "Voice Call initiated");
+
+
+
         });
     }
 
-    private void callTransaction(String duration, String totalDuration, String roomID, String orderId) {
+    private void callTransaction(String duration, String totalDuration, String roomID) {
 
         // Call type information add करें
-        String callType = isVideoCall ? "video" : "voice";
-        isVideoCall = false;
+
+
         Call<List<LoginModels>> call = apicontroller.getInstance().getapi().callTransaction(
                 user.getSender_id(),
                 receiver_id,
@@ -272,7 +312,7 @@ public class CallInviteActivity extends AppCompatActivity {
                 List<LoginModels> data = response.body();
                 Gson gson = new Gson();
                 String json = gson.toJson(data);
-                Log.d("CallEvent", json.toString());
+                Log.d("CallEvent", "Call json"+json.toString());
 
                 if (Integer.parseInt(data.get(0).getMessage()) == 1) {
                     Log.d("CallEvent", "Call transaction successful - " + callType + " call");
@@ -290,9 +330,7 @@ public class CallInviteActivity extends AppCompatActivity {
     }
     private void callStatus(String orderId) {
 
-        // Call type information add करें
-        String callType = isVideoCall ? "video" : "voice";
-        isVideoCall = false;
+
         Call<List<LoginModels>> call = apicontroller.getInstance().getapi().call_status(
                 user.getSender_id(),
                 receiver_id,
@@ -324,9 +362,8 @@ public class CallInviteActivity extends AppCompatActivity {
     }
 
     public void timeDurationEvent() {
-        String orderId = UUID.randomUUID().toString();
+//        String orderId = UUID.randomUUID().toString();
 
-        callStatus(orderId);
 
         ZegoUIKit.addRoomStateChangedListener(new RoomStateChangedListener() {
             @Override
@@ -366,7 +403,7 @@ public class CallInviteActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(),
                                     "Call End",
                                     Toast.LENGTH_LONG).show();
-                            callTransaction(String.valueOf(minutes), durationStr,roomID,orderId);
+                            callTransaction(String.valueOf(minutes), durationStr,roomID);
                             callStartTime = 0;
                             callEndTime = 0;
                         }
@@ -389,5 +426,16 @@ public class CallInviteActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Do NOT call super.onBackPressed();
+        // This prevents the Activity from finishing
+        // Optionally, show a toast or move app to background
+
+        super.onBackPressed();
+        moveTaskToBack(true); // send app to background instead of finishing
+//        Toast.makeText(this, "Call is still ongoing...", Toast.LENGTH_SHORT).show();
     }
 }

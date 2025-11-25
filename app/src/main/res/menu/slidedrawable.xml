@@ -61,6 +61,11 @@
         android:id="@+id/Themes"
         android:icon="@drawable/homeservice"
         android:title="Withdraw Request" />
+
+    <item
+        android:id="@+id/callTransaction"
+        android:icon="@drawable/homeservice"
+        android:title="Call Details" />
   <item
         android:id="@+id/settings"
         android:icon="@drawable/homeservice"

@@ -169,6 +169,8 @@ public class MainActivity extends AppCompatActivity {
 
         OnlineStatus();
         initializeToggleButton();
+
+
     }
     private void initializeToggleButton() {
         toggleButton = findViewById(R.id.toggleButton);
@@ -200,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
                                 currentStatus = Integer.parseInt(response.trim());
                                 updateUI();
                             } catch (NumberFormatException ex) {
-                                Toast.makeText(MainActivity.this, "Invalid response: " + response, Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(MainActivity.this, "Invalid response: " + response, Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -222,14 +224,14 @@ public class MainActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Toast.makeText(MainActivity.this, "Status updated to: " + currentStatus, Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(MainActivity.this, "Status updated to: " + currentStatus, Toast.LENGTH_SHORT).show();
                         updateUI();
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(MainActivity.this, "Update failed: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(MainActivity.this, "Update failed: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                         getStatusFromAPI();
                     }
                 }
@@ -417,6 +419,8 @@ public class MainActivity extends AppCompatActivity {
                     // startActivity(new Intent(getApplicationContext(), Passbook.class));
                 } else if (id == R.id.history) {
                     startActivity(new Intent(getApplicationContext(), History.class));
+                    } else if (id == R.id.callTransaction) {
+                    startActivity(new Intent(getApplicationContext(), CallStatusActivity.class));
 
                 } else if (id == R.id.Themes) {
                     Intent intent = new Intent(getApplicationContext(), WithdrawalActivity.class);
