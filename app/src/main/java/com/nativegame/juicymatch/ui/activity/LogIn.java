@@ -220,6 +220,7 @@ String language1 = "English", language2 = "", language3 = "";
                         user.setUsercity(data.get(0).getCity());
                         user.setUseremail(data.get(0).getEmail());
                         user.setAddress(data.get(0).getAddreass());
+                        user.setGender(data.get(0).getGender());
                         user.setToken(token);
                         user.setUserphone(data.get(0).getMobile());
                         user.setSuscribe(data.get(0).getPaid_status());

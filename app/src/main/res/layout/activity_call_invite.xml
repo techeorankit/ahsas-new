@@ -66,7 +66,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="(5 Coins / mins)"
+                    android:text="Voice Call Charges: 3 Coins / min \nVideo Call Charges: 20 Coins / min"
                     android:textColor="#FF0E0E"
                     android:textSize="12sp" />
 
@@ -120,27 +120,17 @@
             app:civ_border_color="@color/white"
             app:civ_border_width="3dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/raound_login"
-            android:gravity="center"
-            android:paddingHorizontal="16dp"
-            android:paddingVertical="8dp"
-            android:text="5 Coins / min"
-            android:textColor="#FF0E0E"
-            android:textSize="14sp"
-            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/call_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
             android:text="Ready to connect"
-            android:textColor="@color/black"
-            android:textSize="12sp" />
+            android:layout_gravity="center"
+            android:textColor="@color/green"
+            android:textSize="18sp" />
 
     </LinearLayout>
 

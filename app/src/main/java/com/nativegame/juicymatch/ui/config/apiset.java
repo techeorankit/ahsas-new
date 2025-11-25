@@ -69,7 +69,19 @@ public interface apiset {
             @Query("receiver_id") String receiver_id,
             @Query("duration") String duration,
             @Query("totalDuration") String totalDuration,
-            @Query("callType") String callType
+            @Query("callType") String callType,
+            @Query("roomID") String roomID,
+            @Query("orderId") String orderId
+
+    );
+
+    @GET("call_status.php")
+    Call<List<LoginModels>> call_status(
+            @Query("sender_id") String sender_id,
+            @Query("receiver_id") String receiver_id,
+            @Query("call_type") String callType,
+            @Query("orderId") String orderId
+
     );
 
     @GET("chat_transaction.php")

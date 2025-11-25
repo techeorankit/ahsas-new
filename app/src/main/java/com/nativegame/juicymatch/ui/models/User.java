@@ -6,11 +6,20 @@ import android.content.SharedPreferences;
 public class User {
     Context context;
     private String sender_id,email,wallet_amt,filterdata,userid,username,useremail,userphone,usercity,address,pincode,cityaddsection,suscribe,cartcount,servicecategoryname,splashsell;
-    String shipname,shipemail,shipphone,myrefid,reffrence_id,shipaddress,shippincode,shipcity,showbottom,sellongetmi,servise,shopname,ownername,officeaddress,photo,chooseshopservice,apiservicecatid,token,
+    String gender ,shipname,shipemail,shipphone,myrefid,reffrence_id,shipaddress,shippincode,shipcity,showbottom,sellongetmi,servise,shopname,ownername,officeaddress,photo,chooseshopservice,apiservicecatid,token,
             shopcity,shopmobile,shopaddress,shoppincode, c_id;
     SharedPreferences sharedPreferences;
     boolean editor , registration= true ;
 
+    public String getGender() {
+        gender = sharedPreferences.getString( "gender","" );
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        sharedPreferences.edit().putString( "gender",gender ).commit();
+        this.gender = gender;
+    }
 
     public String getSender_id() {
         sender_id = sharedPreferences.getString( "sender_id","" );

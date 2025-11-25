@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -39,7 +40,10 @@ public class GroupCallFetchActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         database = FirebaseDatabase.getInstance();
         user = new User(this);
-
+        getWindow().setFlags(
+                WindowManager.LayoutParams.FLAG_SECURE,
+                WindowManager.LayoutParams.FLAG_SECURE
+        );
         receiver_id = getIntent().getStringExtra("receiver_id");
 
         binding.searchicon.setOnClickListener(new View.OnClickListener() {

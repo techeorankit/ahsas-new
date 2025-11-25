@@ -2,12 +2,13 @@ package com.nativegame.juicymatch.ui.models;
 
 public class LoginModels {
 
-    String sender_id,message, u_id, name, mobile, photo, city, email, refer_id, addreass, otp, owner_name, shop_name,
+    String gender, sender_id,message, u_id, name, mobile, photo, city, email, refer_id, addreass, otp, owner_name, shop_name,
             shop_mobile, bank_acc_no,bank_name,bank_ifsc, shop_address, shop_city, shop_logo,shop_color,pincode,like_count,comment_count,total_product,
             paid_status,trusted_status ,follow_s, c_id,u_wallet,shop_detail,about_us, fb_link, insta_link, linkedin_link, web_link;
     int shop_status;
 
-    public LoginModels(String sender_id,String message, String u_id, String name, String mobile, String photo, String city, String email, String refer_id, String addreass, String otp, String owner_name, String shop_name, String shop_mobile, String bank_acc_no, String bank_name, String bank_ifsc, String shop_address, String shop_city, String shop_logo, String shop_color, String pincode, String like_count, String comment_count, String total_product, String paid_status, String trusted_status, String follow_s, String c_id, String u_wallet, String shop_detail, String about_us, String fb_link, String insta_link, String linkedin_link, String web_link, int shop_status) {
+    public LoginModels(String gender ,String sender_id,String message, String u_id, String name, String mobile, String photo, String city, String email, String refer_id, String addreass, String otp, String owner_name, String shop_name, String shop_mobile, String bank_acc_no, String bank_name, String bank_ifsc, String shop_address, String shop_city, String shop_logo, String shop_color, String pincode, String like_count, String comment_count, String total_product, String paid_status, String trusted_status, String follow_s, String c_id, String u_wallet, String shop_detail, String about_us, String fb_link, String insta_link, String linkedin_link, String web_link, int shop_status) {
+        this.gender = gender;
         this.sender_id = sender_id;
         this.message = message;
         this.u_id = u_id;
@@ -45,6 +46,14 @@ public class LoginModels {
         this.linkedin_link = linkedin_link;
         this.web_link = web_link;
         this.shop_status = shop_status;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public String getSender_id() {

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -88,6 +89,13 @@ int coin=0;
         time = getIntent().getIntExtra("time", 5);
         binding.time.setText("( " + 2 + " Coins / mins )");
         binding.name.setText(name);
+        userStatusTextView = findViewById(R.id.online);
+        Log.d("onlineOnline","Online"+receiver_id);
+
+        getWindow().setFlags(
+                WindowManager.LayoutParams.FLAG_SECURE,
+                WindowManager.LayoutParams.FLAG_SECURE
+        );
 
         Glide.with(getApplicationContext())
                 .load(shop_logo_url + image).placeholder(R.drawable.logo).into(binding.profileImage);
@@ -147,11 +155,11 @@ int coin=0;
                         return;
                     }
 
-                    if (!user.getSuscribe().equals("1")){
+                    if (!user.getSuscribe().equals("1") && !user.getGender().equals("Female")){
                         callTransaction();
                     }
 
-//                    Toast.makeText(ChatRoomActivity.this, ""+user.getSuscribe(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(ChatRoomActivity.this, "getSuscribe"+user.getGender(), Toast.LENGTH_SHORT).show();
 
 
                     String message = binding.etMessage.getText().toString();
@@ -192,7 +200,7 @@ int coin=0;
         OnlineStatus();
         countdata();
         walletFetch();
-        displayUserStatus();
+        displayUserStatus(receiver_id);
 
 
     }
@@ -231,11 +239,12 @@ int coin=0;
                 if (Integer.parseInt(data.get(0).getMessage()) == 1) {
 
                     if (!data.get(0).getU_wallet().isEmpty()){
-                        if (Integer.parseInt(data.get(0).getU_wallet())>2){
+                        double walletValue = Double.parseDouble(data.get(0).getU_wallet());
 
-                            coin =Integer.parseInt(data.get(0).getU_wallet());
-
-                        }else{
+                        if (walletValue >= 3) {
+                            // If coin must be int
+                            coin = (int) walletValue;
+                        } else {
                             Toast.makeText(getApplicationContext(), "Please add coins.", Toast.LENGTH_SHORT).show();
                             finish();
                         }
@@ -265,10 +274,12 @@ int coin=0;
     }
 
 
-    private void displayUserStatus() {
+    private void displayUserStatus(String receiver_idnew) {
+        Log.d("onlineOnline","bbbbOnline"+receiver_idnew);
+
         DatabaseReference userStatusDisplayRef = FirebaseDatabase.getInstance()
                 .getReference("users")
-                .child(receiver_id)
+                .child(receiver_idnew)
                 .child("online");
 
         userStatusDisplayRef.addValueEventListener(new ValueEventListener() {
@@ -277,11 +288,14 @@ int coin=0;
                 if (snapshot.exists()) {
                     boolean isOnline = snapshot.getValue(Boolean.class);
                     if (isOnline) {
+                        Log.d("onlineOnline","Online"+receiver_idnew);
                         userStatusTextView.setText("Online");
                     } else {
                         userStatusTextView.setText("Offline");
+                        Log.d("onlineOnline","Offline");
                     }
                 } else {
+                    Log.d("onlineOnline","Status Unknown");
                     userStatusTextView.setText("Status Unknown");
                 }
             }
@@ -294,7 +308,7 @@ int coin=0;
     }
 
     private void OnlineStatus() {
-        userStatusTextView = findViewById(R.id.online);
+
         // Initialize Firebase references
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         userStatusRef = database.getReference("users").child(user.getSender_id()).child("online");

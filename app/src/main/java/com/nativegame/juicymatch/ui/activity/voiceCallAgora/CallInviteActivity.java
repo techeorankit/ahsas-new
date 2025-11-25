@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,6 +35,7 @@ import org.json.JSONObject;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import im.zego.zegoexpress.constants.ZegoRoomStateChangedReason;
 import retrofit2.Call;
@@ -57,10 +59,15 @@ public class CallInviteActivity extends AppCompatActivity {
         binding = ActivityCallInviteBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        getWindow().setFlags(
+                WindowManager.LayoutParams.FLAG_SECURE,
+                WindowManager.LayoutParams.FLAG_SECURE
+        );
+
         user = new User(this);
         receiver_id = getIntent().getStringExtra("receiver_id");
         binding.name.setText(getIntent().getStringExtra("name"));
-        binding.time.setText("( " + 5 + " Coins / mins )");
+//        binding.time.setText("( " + 5 + " Coins / mins )");
         Log.d("receiver_id1122", receiver_id);
         Glide.with(getApplicationContext())
                 .load(shop_logo_url + getIntent().getStringExtra("image")).placeholder(R.drawable.logo).into(binding.profileImage);
@@ -202,7 +209,7 @@ public class CallInviteActivity extends AppCompatActivity {
             }
             voiceCallButton.setInvitees(users);
             timeDurationEvent();
-            binding.callStatus.setText("Initiating voice call...");
+//            binding.callStatus.setText("Initiating voice call...");
             Log.d("CallType", "Voice Call initiated");
         });
     }
@@ -244,7 +251,7 @@ public class CallInviteActivity extends AppCompatActivity {
         });
     }
 
-    private void callTransaction(String duration, String totalDuration) {
+    private void callTransaction(String duration, String totalDuration, String roomID, String orderId) {
 
         // Call type information add करें
         String callType = isVideoCall ? "video" : "voice";
@@ -254,7 +261,43 @@ public class CallInviteActivity extends AppCompatActivity {
                 receiver_id,
                 duration,
                 totalDuration,
-                callType
+                callType,
+                roomID,
+                orderId
+        );
+
+        call.enqueue(new Callback<List<LoginModels>>() {
+            @Override
+            public void onResponse(Call<List<LoginModels>> call, Response<List<LoginModels>> response) {
+                List<LoginModels> data = response.body();
+                Gson gson = new Gson();
+                String json = gson.toJson(data);
+                Log.d("CallEvent", json.toString());
+
+                if (Integer.parseInt(data.get(0).getMessage()) == 1) {
+                    Log.d("CallEvent", "Call transaction successful - " + callType + " call");
+                }
+                if (Integer.parseInt(data.get(0).getMessage()) == 0) {
+                    Log.d("CallEvent", "Call transaction failed");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<LoginModels>> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private void callStatus(String orderId) {
+
+        // Call type information add करें
+        String callType = isVideoCall ? "video" : "voice";
+        isVideoCall = false;
+        Call<List<LoginModels>> call = apicontroller.getInstance().getapi().call_status(
+                user.getSender_id(),
+                receiver_id,
+                callType,
+                orderId
         );
 
         call.enqueue(new Callback<List<LoginModels>>() {
@@ -281,6 +324,9 @@ public class CallInviteActivity extends AppCompatActivity {
     }
 
     public void timeDurationEvent() {
+        String orderId = UUID.randomUUID().toString();
+
+        callStatus(orderId);
 
         ZegoUIKit.addRoomStateChangedListener(new RoomStateChangedListener() {
             @Override
@@ -316,11 +362,11 @@ public class CallInviteActivity extends AppCompatActivity {
                             Log.d("CallEvent", "Call duration: " + minutes);
                             Log.d("CallEvent", "Call type: " + (isVideoCall ? "Video" : "Voice"));
 
-                            binding.imageView5.setText(durationStr + "\nCall Duration Time");
+                            binding.callStatus.setText(durationStr + "\nCall Duration Time");
                             Toast.makeText(getApplicationContext(),
                                     "Call End",
                                     Toast.LENGTH_LONG).show();
-                            callTransaction(String.valueOf(minutes), durationStr);
+                            callTransaction(String.valueOf(minutes), durationStr,roomID,orderId);
                             callStartTime = 0;
                             callEndTime = 0;
                         }

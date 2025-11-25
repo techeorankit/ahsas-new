@@ -1,6 +1,7 @@
 package com.nativegame.juicymatch.ui.activity.voiceCallAgora;
 
 import android.os.Bundle;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -42,6 +43,11 @@ public class GroupCallActivity extends AppCompatActivity {
         binding = ActivityGroupCallBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         user = new User(this);
+
+        getWindow().setFlags(
+                WindowManager.LayoutParams.FLAG_SECURE,
+                WindowManager.LayoutParams.FLAG_SECURE
+        );
         receiver_id = getIntent().getStringExtra("receiver_id");
         database = FirebaseDatabase.getInstance();
         messageModels = new ArrayList<>();

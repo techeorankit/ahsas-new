@@ -23,6 +23,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -130,6 +131,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
 
+
+        getWindow().setFlags(
+                WindowManager.LayoutParams.FLAG_SECURE,
+                WindowManager.LayoutParams.FLAG_SECURE
+        );
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         setContentView(binding.getRoot());
         setSupportActionBar(binding.appBarMain.toolbar);
@@ -138,6 +144,8 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setStatusBarColor(ContextCompat.getColor(MainActivity.this,R.color.white));
         checkInternet();
         updateApp();
+
+
 
         // Initialize user and call service
         user = new User(getApplicationContext());
